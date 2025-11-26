@@ -15,41 +15,85 @@
     <div class="fixed inset-0 z-0"></div>
     <div class="relative z-10 flex flex-col min-h-screen">
     <!-- Navigation Bar - Fixed at Top -->
-    <nav class="fixed top-0 left-0 right-0 bg-white shadow-lg z-50" x-data="{ mobileMenuOpen: false }">
+    <nav class="fixed top-0 left-0 right-0 bg-white shadow-lg z-50" x-data="{ mobileMenuOpen: false, userMenuOpen: false }">
         <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
                 <div class="flex items-center shrink-0">
-                    <a href="{{ route('books.index') }}" class="flex items-center gap-2 whitespace-nowrap">
+                    <a href="{{ Auth::check() ? route('dashboard') : route('login') }}" class="flex items-center gap-2 whitespace-nowrap">
                         <img src="/logo.png" alt="Library Logo" class="h-16 w-auto sm:h-20">
                         <span class="text-lg sm:text-2xl font-bold text-indigo-600">Library Master</span>
                     </a>
                 </div>
 
-                <!-- Desktop Menu -->
+                @auth
+                <!-- Desktop Menu (Admin Only) -->
                 <div class="hidden md:flex space-x-1">
-                    <a href="{{ route('books.index') }}" class="px-3 py-2 rounded-md text-xs sm:text-sm font-medium @if(request()->routeIs('books.*')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif transition">
-                        Books
+                    <a href="{{ route('dashboard') }}" class="px-3 py-2 rounded-md text-xs sm:text-sm font-medium @if(request()->routeIs('dashboard')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif transition">
+                        Dashboard
                     </a>
-                    <a href="{{ route('categories.index') }}" class="px-3 py-2 rounded-md text-xs sm:text-sm font-medium @if(request()->routeIs('categories.*')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif transition">
-                        Categories
-                    </a>
-                    <a href="{{ route('users.index') }}" class="px-3 py-2 rounded-md text-xs sm:text-sm font-medium @if(request()->routeIs('users.*')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif transition">
-                        Users
-                    </a>
-                    <a href="{{ route('borrow.issue') }}" class="px-3 py-2 rounded-md text-xs sm:text-sm font-medium @if(request()->routeIs('borrow.issue')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif transition">
-                        Issue
-                    </a>
-                    <a href="{{ route('borrow.return') }}" class="px-3 py-2 rounded-md text-xs sm:text-sm font-medium @if(request()->routeIs('borrow.return')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif transition">
-                        Return
-                    </a>
-                    <a href="{{ route('borrow.logs') }}" class="px-3 py-2 rounded-md text-xs sm:text-sm font-medium @if(request()->routeIs('borrow.logs')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif transition">
-                        Logs
-                    </a>
+                    @if(Auth::user()->role === 'admin')
+                        <a href="{{ route('books.index') }}" class="px-3 py-2 rounded-md text-xs sm:text-sm font-medium @if(request()->routeIs('books.*')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif transition">
+                            Books
+                        </a>
+                        <a href="{{ route('categories.index') }}" class="px-3 py-2 rounded-md text-xs sm:text-sm font-medium @if(request()->routeIs('categories.*')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif transition">
+                            Categories
+                        </a>
+                        <a href="{{ route('users.index') }}" class="px-3 py-2 rounded-md text-xs sm:text-sm font-medium @if(request()->routeIs('users.*')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif transition">
+                            Users
+                        </a>
+                        <a href="{{ route('borrow.issue') }}" class="px-3 py-2 rounded-md text-xs sm:text-sm font-medium @if(request()->routeIs('borrow.issue')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif transition">
+                            Issue
+                        </a>
+                        <a href="{{ route('borrow.return') }}" class="px-3 py-2 rounded-md text-xs sm:text-sm font-medium @if(request()->routeIs('borrow.return')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif transition">
+                            Return
+                        </a>
+                        <a href="{{ route('borrow.logs') }}" class="px-3 py-2 rounded-md text-xs sm:text-sm font-medium @if(request()->routeIs('borrow.logs')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif transition">
+                            Logs
+                        </a>
+                    @endif
+                </div>
+
+                <!-- User Menu (Desktop) -->
+                <div class="hidden md:flex items-center space-x-4">
+                    <div class="relative" @click.outside="userMenuOpen = false">
+                        <button @click="userMenuOpen = !userMenuOpen" class="flex items-center space-x-2 px-3 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition">
+                            <span class="text-sm font-medium">{{ Auth::user()->name }}</span>
+                            <svg :class="userMenuOpen && 'rotate-180'" class="h-4 w-4 transition" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+
+                        <div x-show="userMenuOpen" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 z-50">
+                            <form method="POST" action="{{ route('logout') }}" class="block">
+                                @csrf
+                                <button type="submit" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    Logout
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Mobile Menu Button -->
-                <div class="md:hidden">
+                <div class="md:hidden flex items-center space-x-2">
+                    <div class="relative" @click.outside="userMenuOpen = false">
+                        <button @click="userMenuOpen = !userMenuOpen" class="p-2 rounded-md text-gray-700 hover:bg-gray-100">
+                            <svg class="h-5 w-5" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd"></path>
+                            </svg>
+                        </button>
+
+                        <div x-show="userMenuOpen" class="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-xl py-2 z-50">
+                            <hr class="my-2">
+                            <form method="POST" action="{{ route('logout') }}" class="block">
+                                @csrf
+                                <button type="submit" class="w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                                    Logout
+                                </button>
+                            </form>
+                        </div>
+                    </div>
                     <button @click="mobileMenuOpen = !mobileMenuOpen" class="p-2 rounded-md text-gray-700 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-indigo-500">
                         <svg x-show="!mobileMenuOpen" class="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
@@ -59,29 +103,38 @@
                         </svg>
                     </button>
                 </div>
+                @else
+                @endauth
             </div>
 
             <!-- Mobile Menu -->
+            @auth
             <div x-show="mobileMenuOpen" @click.away="mobileMenuOpen = false" class="md:hidden border-t border-gray-200 bg-white">
-                <a href="{{ route('books.index') }}" class="block px-3 py-2 rounded-md text-sm font-medium @if(request()->routeIs('books.*')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif">
-                    Books
+                <a href="{{ route('dashboard') }}" class="block px-3 py-2 rounded-md text-sm font-medium @if(request()->routeIs('dashboard')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif">
+                    Dashboard
                 </a>
-                <a href="{{ route('categories.index') }}" class="block px-3 py-2 rounded-md text-sm font-medium @if(request()->routeIs('categories.*')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif">
-                    Categories
-                </a>
-                <a href="{{ route('users.index') }}" class="block px-3 py-2 rounded-md text-sm font-medium @if(request()->routeIs('users.*')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif">
-                    Users
-                </a>
-                <a href="{{ route('borrow.issue') }}" class="block px-3 py-2 rounded-md text-sm font-medium @if(request()->routeIs('borrow.issue')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif">
-                    Issue Book
-                </a>
-                <a href="{{ route('borrow.return') }}" class="block px-3 py-2 rounded-md text-sm font-medium @if(request()->routeIs('borrow.return')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif">
-                    Return Book
-                </a>
-                <a href="{{ route('borrow.logs') }}" class="block px-3 py-2 rounded-md text-sm font-medium @if(request()->routeIs('borrow.logs')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif">
-                    Logs
-                </a>
+                @if(Auth::user()->role === 'admin')
+                    <a href="{{ route('books.index') }}" class="block px-3 py-2 rounded-md text-sm font-medium @if(request()->routeIs('books.*')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif">
+                        Books
+                    </a>
+                    <a href="{{ route('categories.index') }}" class="block px-3 py-2 rounded-md text-sm font-medium @if(request()->routeIs('categories.*')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif">
+                        Categories
+                    </a>
+                    <a href="{{ route('users.index') }}" class="block px-3 py-2 rounded-md text-sm font-medium @if(request()->routeIs('users.*')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif">
+                        Users
+                    </a>
+                    <a href="{{ route('borrow.issue') }}" class="block px-3 py-2 rounded-md text-sm font-medium @if(request()->routeIs('borrow.issue')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif">
+                        Issue Book
+                    </a>
+                    <a href="{{ route('borrow.return') }}" class="block px-3 py-2 rounded-md text-sm font-medium @if(request()->routeIs('borrow.return')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif">
+                        Return Book
+                    </a>
+                    <a href="{{ route('borrow.logs') }}" class="block px-3 py-2 rounded-md text-sm font-medium @if(request()->routeIs('borrow.logs')) bg-indigo-100 text-indigo-600 @else text-gray-700 hover:bg-gray-100 @endif">
+                        Logs
+                    </a>
+                @endif
             </div>
+            @endauth
         </div>
     </nav>
 
@@ -105,7 +158,7 @@
     <footer class="fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40">
         <div class="max-w-7xl mx-auto px-3 sm:px-4 lg:px-8 py-4 sm:py-5">
             <p class="text-center text-gray-600 text-xs sm:text-sm">
-                &copy; 2025 Library Book Management System. All rights reserved.
+                &copy; 2025 Library Book Management System.
             </p>
         </div>
     </footer>

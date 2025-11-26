@@ -1,9 +1,13 @@
 @props(['type' => 'success', 'message'])
 
-<div class="mb-6" x-data="{ show: true }" x-show="show" x-transition>
-    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+<div class="fixed top-16 left-0 right-0 z-50 px-4 sm:px-6 lg:px-8" 
+     x-data="{ show: true }" 
+     x-show="show" 
+     x-transition
+     x-init="setTimeout(() => show = false, 2000)">
+    <div class="max-w-7xl mx-auto">
         @if($type === 'success')
-            <div class="rounded-md bg-green-50 p-4 border border-green-200">
+            <div class="rounded-md bg-green-50 p-4 border border-green-200 shadow-lg">
                 <div class="flex">
                     <div class="flex-shrink-0">
                         <svg class="h-5 w-5 text-green-400" fill="currentColor" viewBox="0 0 20 20">
@@ -23,7 +27,7 @@
                 </div>
             </div>
         @elseif($type === 'error')
-            <div class="rounded-md bg-red-50 p-4 border border-red-200">
+            <div class="rounded-md bg-red-50 p-4 border border-red-200 shadow-lg">
                 <div class="flex">
                     <div class="flex-shrink-0">
                         <svg class="h-5 w-5 text-red-400" fill="currentColor" viewBox="0 0 20 20">
