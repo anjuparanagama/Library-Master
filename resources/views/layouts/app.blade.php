@@ -3,19 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta property="og:image" content="{{ url('/logo.png') }}">
+    <meta name="twitter:image" content="{{ url('/logo.png') }}">
+    <meta name="theme-color" content="#4F46E5">
+    <link rel="icon" href="{{ url('/logo.png') }}" type="image/png">
     <title>@yield('title', 'Library Book Management System')</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://cdn.jsdelivr.net/npm/alpinejs@3.x.x/dist/cdn.min.js" defer></script>
 </head>
-<body class="bg-gray-50 flex flex-col min-h-screen">
+<body class="flex flex-col min-h-screen" style="background-image: url('/background.jpg'); background-attachment: fixed; background-size: cover; background-position: center;">
+    <div class="fixed inset-0 z-0"></div>
+    <div class="relative z-10 flex flex-col min-h-screen">
     <!-- Navigation Bar - Fixed at Top -->
     <nav class="fixed top-0 left-0 right-0 bg-white shadow-lg z-50" x-data="{ mobileMenuOpen: false }">
         <div class="max-w-7xl mx-auto px-2 sm:px-4 lg:px-8">
             <div class="flex justify-between items-center h-16">
                 <!-- Logo -->
                 <div class="flex items-center shrink-0">
-                    <a href="{{ route('books.index') }}" class="text-xl sm:text-2xl font-bold text-indigo-600 whitespace-nowrap">
-                        📚 Library Master
+                    <a href="{{ route('books.index') }}" class="flex items-center gap-2 whitespace-nowrap">
+                        <img src="/logo.png" alt="Library Logo" class="h-16 w-auto sm:h-20">
+                        <span class="text-lg sm:text-2xl font-bold text-indigo-600">Library Master</span>
                     </a>
                 </div>
 
@@ -102,5 +109,6 @@
             </p>
         </div>
     </footer>
+    </div>
 </body>
 </html>

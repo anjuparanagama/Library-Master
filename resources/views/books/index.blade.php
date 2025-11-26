@@ -13,22 +13,22 @@
     </div>
 
     <!-- Category Filter -->
-    <div class="bg-white rounded-lg shadow p-3 sm:p-4">
+    <div class="bg-white rounded-lg shadow p-4 sm:p-6">
         <form method="GET" action="{{ route('books.index') }}" class="flex flex-col sm:flex-row gap-3 sm:gap-4 items-start sm:items-end">
             <div class="flex-1 w-full sm:w-auto">
-                <label class="block text-xs sm:text-sm font-medium text-gray-700 mb-2">Filter by Category</label>
-                <select name="category" class="w-full px-3 sm:px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent text-sm" onchange="this.form.submit()">
-                    <option value="">All Categories</option>
+                <label class="block text-sm font-semibold text-gray-900 mb-3">📚 Filter by Category</label>
+                <select name="category" class="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 text-sm font-medium bg-white text-gray-900 appearance-none cursor-pointer hover:border-gray-400 transition" onchange="this.form.submit()">
+                    <option value="" class="text-gray-900">All Categories</option>
                     @foreach($categories ?? [] as $category)
-                        <option value="{{ $category->id }}" @if(request('category') == $category->id) selected @endif>
+                        <option value="{{ $category->id }}" class="text-gray-900" @if(request('category') == $category->id) selected @endif>
                             {{ $category->name }}
                         </option>
                     @endforeach
                 </select>
             </div>
             @if(request('category'))
-                <a href="{{ route('books.index') }}" class="w-full sm:w-auto bg-gray-300 text-gray-700 px-3 sm:px-4 py-2 rounded-lg hover:bg-gray-400 transition font-medium text-center text-sm">
-                    Clear Filter
+                <a href="{{ route('books.index') }}" class="w-full sm:w-auto bg-indigo-600 text-white px-4 py-3 rounded-lg hover:bg-indigo-700 transition font-semibold text-center text-sm">
+                    ✕ Clear Filter
                 </a>
             @endif
         </form>
@@ -62,7 +62,7 @@
                                 <span class="text-xs sm:text-sm text-gray-600">{{ $book->category->name ?? 'N/A' }}</span>
                             </td>
                             <td class="px-3 sm:px-6 py-4 whitespace-nowrap">
-                                <span class="text-xs sm:text-sm font-medium text-gray-900">${{ number_format($book->price, 2) }}</span>
+                                <span class="text-xs sm:text-sm font-medium text-gray-900">Rs.{{ number_format($book->price, 2) }}</span>
                             </td>
                             <td class="px-3 sm:px-6 py-4 whitespace-nowrap">
                                 @if($book->stock == 0)
@@ -112,7 +112,7 @@
                         </div>
                         <div class="flex justify-between text-xs text-gray-600">
                             <span>Category: {{ $book->category->name ?? 'N/A' }}</span>
-                            <span class="font-medium text-gray-900">${{ number_format($book->price, 2) }}</span>
+                            <span class="font-medium text-gray-900">Rs.{{ number_format($book->price, 2) }}</span>
                         </div>
                         <div class="flex gap-2 flex-wrap pt-2 border-t border-gray-200">
                             <a href="{{ route('books.edit', $book->id) }}" class="text-xs bg-blue-50 text-blue-600 px-3 py-1 rounded hover:bg-blue-100">Edit</a>

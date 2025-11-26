@@ -7,83 +7,76 @@
     <div class="bg-white rounded-lg shadow p-8">
         <h1 class="text-2xl font-bold text-gray-900 mb-6">Return Book from User</h1>
 
-        <form action="{{ route('borrow.store-return') }}" method="POST" class="space-y-6">
-            @csrf
-
-            <!-- User Dropdown -->
+        <!-- User Selection Form (GET) -->
+        <form method="GET" action="{{ route('borrow.return') }}" class="space-y-4 mb-6">
             <div>
                 <label for="user_id" class="block text-sm font-medium text-gray-700 mb-2">Select User <span class="text-red-500">*</span></label>
-                <select 
-                    id="user_id" 
-                    name="user_id"
-                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('user_id') border-red-500 @enderror"
-                    required
-                    onchange="this.form.submit()"
-                >
-                    <option value="">-- Select a user --</option>
-                    @foreach($users ?? [] as $user)
-                        <option value="{{ $user->id }}" @if(old('user_id', request('user_id')) == $user->id) selected @endif>
-                            {{ $user->name }} ({{ $user->email }})
-                        </option>
-                    @endforeach
-                </select>
-                @error('user_id')
-                    <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                @enderror
-            </div>
-
-            <!-- Book Dropdown - Only show books issued to this user -->
-            @if(request('user_id') || old('user_id'))
-                <div>
-                    <label for="book_id" class="block text-sm font-medium text-gray-700 mb-2">Select Book <span class="text-red-500">*</span></label>
+                <div class="flex gap-2">
                     <select 
-                        id="book_id"
-                        name="book_id"
-                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent @error('book_id') border-red-500 @enderror"
+                        id="user_id" 
+                        name="user_id"
+                        class="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
+                        required
+                    >
+                        <option value="">-- Select a user --</option>
+                        @foreach($users ?? [] as $user)
+                            <option value="{{ $user->id }}" @if(request('user_id') == $user->id) selected @endif>
+                                {{ $user->name }} ({{ $user->email }})
+                            </option>
+                        @endforeach
+                    </select>
+                    <button type="submit" class="px-6 py-2 bg-indigo-600 text-white rounded-lg hover:bg-indigo-700 transition font-medium">
+                        Load Books
+                    </button>
+                </div>
+            </div>
+        </form>
+
+        <!-- Return Book Form (POST) - Only show when user is selected -->
+        @if(request('user_id') && !empty($issuedBooks) && count($issuedBooks) > 0)
+            <form action="{{ route('borrow.store-return') }}" method="POST" class="space-y-6">
+                @csrf
+                <input type="hidden" name="user_id" value="{{ request('user_id') }}">
+
+                <div>
+                    <label for="borrow_id" class="block text-sm font-medium text-gray-700 mb-2">Select Book to Return <span class="text-red-500">*</span></label>
+                    <select 
+                        id="borrow_id"
+                        name="borrow_id"
+                        class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-indigo-500 focus:border-transparent"
                         required
                     >
                         <option value="">-- Select a book to return --</option>
-                        @foreach($issuedBooks ?? [] as $borrow)
+                        @foreach($issuedBooks as $borrow)
                             <option value="{{ $borrow->id }}">
                                 {{ $borrow->book->title }} by {{ $borrow->book->author }} 
                                 (Issued: {{ $borrow->issue_date->format('M d, Y') }})
                             </option>
                         @endforeach
                     </select>
-                    @if(empty($issuedBooks) || count($issuedBooks) == 0)
-                        <p class="mt-2 text-sm text-yellow-600">ℹ️ This user has no books currently issued.</p>
-                    @endif
-                    @error('book_id')
-                        <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
-                    @enderror
                 </div>
-            @endif
 
-            <!-- Info Box -->
-            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p class="text-sm text-blue-800">
-                    <strong>Note:</strong> When you return a book, the stock will be automatically increased by 1 and the return record will be updated.
-                </p>
-            </div>
-
-            <!-- Form Actions -->
-            <div class="flex gap-3 pt-4">
-                @if(request('user_id') || old('user_id'))
+                <!-- Form Actions -->
+                <div class="flex gap-3 pt-4">
                     <button 
                         type="submit" 
                         class="flex-1 bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition font-medium"
                     >
                         Return Book
                     </button>
-                @endif
-                <a 
-                    href="{{ route('books.index') }}" 
-                    class="@if(request('user_id') || old('user_id')) flex-1 @else w-full @endif bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400 transition font-medium text-center"
-                >
-                    Cancel
-                </a>
+                    <a 
+                        href="{{ route('books.index') }}" 
+                        class="flex-1 bg-gray-300 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-400 transition font-medium text-center"
+                    >
+                        Cancel
+                    </a>
+                </div>
+            </form>
+        @elseif(request('user_id'))
+            <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-4 text-center">
+                <p class="text-sm text-yellow-800">ℹ️ This user has no books currently issued.</p>
             </div>
-        </form>
+        @endif
     </div>
 
     <!-- Quick Stats -->

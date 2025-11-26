@@ -62,10 +62,10 @@ class BorrowController extends Controller
     {
         $validated = $request->validate([
             'user_id' => 'required|exists:users,id',
-            'book_id' => 'required|exists:borrows,id',
+            'borrow_id' => 'required|exists:borrows,id',
         ]);
 
-        $borrow = Borrow::find($validated['book_id']);
+        $borrow = Borrow::find($validated['borrow_id']);
 
         if (!$borrow || $borrow->return_date !== null) {
             return redirect()->back()->with('error', 'Book already returned or invalid record!');

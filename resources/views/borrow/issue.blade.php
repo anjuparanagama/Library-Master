@@ -58,13 +58,6 @@
                 @enderror
             </div>
 
-            <!-- Info Box -->
-            <div class="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <p class="text-sm text-blue-800">
-                    <strong>Note:</strong> When you issue a book, the stock will be automatically decreased by 1. A return record will be created for tracking.
-                </p>
-            </div>
-
             <!-- Form Actions -->
             <div class="flex gap-3 pt-4">
                 <button 
