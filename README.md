@@ -75,6 +75,9 @@ php artisan serve
 - ✅ Store user information (name, email, phone, address)
 - ✅ Secure password management
 - ✅ User profile management
+- ✅ **Admin-only user registration** - Users can only be created by administrators
+- ✅ **Role-based user creation** - Assign admin or regular user roles during registration
+- ✅ **No public self-registration** - Prevents unauthorized user account creation
 
 ### 📤 Book Borrowing & Returns
 - ✅ Issue books to users
@@ -231,12 +234,68 @@ Book Management System/
 ### UserController
 ```php
 - index()       // List all users
-- create()      // Show user creation form
-- store()       // Create new user
+- create()      // Show user creation form (Admin only)
+- store()       // Create new user with role assignment
 - edit()        // Show edit form
 - update()      // Update user details
 - destroy()     // Delete user
 ```
+
+---
+
+## 🔐 User Registration & Management System
+
+### How User Registration Works
+
+**Key Feature:** Users cannot register themselves. Only administrators can create new user accounts.
+
+#### Admin Creates User Account:
+1. Admin logs in with credentials
+2. Goes to **"Users"** section
+3. Clicks **"Create User"** button
+4. Fills in user details:
+   - **Name** - Full name of the user
+   - **Email** - Unique email address (login credential)
+   - **Password** - Secure password (min 8 characters)
+   - **Phone** - Optional contact number
+   - **Address** - Optional address
+   - **Role** - Choose between:
+     - **Regular User** - Limited access (view only)
+     - **Admin** - Full system access
+5. Clicks **"Save"**
+6. User account is created with credentials
+
+#### User Logs In:
+1. User receives email and password from admin
+2. Goes to login page: http://localhost:8000
+3. Enters provided email and password
+4. Accesses system based on assigned role
+
+### Security Benefits
+- ✅ **No Unauthorized Access** - Users can't create accounts without permission
+- ✅ **Controlled User Management** - Admin controls who gets access
+- ✅ **Role Assignment** - Admin decides user permissions at creation
+- ✅ **Secure Credentials** - Passwords are hashed and never visible
+- ✅ **Prevents Spam** - Eliminates fake or test accounts
+
+### Registration Workflow Diagram
+```
+Admin Login
+    ↓
+Navigate to Users
+    ↓
+Click "Create User"
+    ↓
+Fill User Details + Assign Role
+    ↓
+Save/Create Account
+    ↓
+Provide Credentials to User
+    ↓
+User Logs In with Given Credentials
+```
+
+---
 
 ### BorrowController
 ```php
@@ -328,20 +387,30 @@ On the dashboard you can see:
 5. Click **"Save"**
 6. Categories are now available for book assignment
 
-#### Step 5: Manage Users
+#### Step 5: Manage Users (Create User Accounts)
+This is where admin creates login credentials for new users.
+
 1. Click **"Users"** in menu
-2. View all registered users
-3. Click **"Create User"** to add new:
-   - Name: Full name
-   - Email: Unique email address
-   - Password: Secure password (min 8 chars)
-   - Phone: Optional
-   - Address: Optional
-4. Click **"Save"**
+2. View all registered users in table
+3. Click **"Create User"** button to register new user
+4. Fill in user details:
+   - **Name:** Full name of the user
+   - **Email:** Unique email (this is login credential)
+   - **Password:** Secure password (minimum 8 characters)
+   - **Confirm Password:** Re-enter password to confirm
+   - **Phone:** Optional contact number
+   - **Address:** Optional address
+   - **Role:** 
+     - **Regular User** - Can only view their borrowed books
+     - **Admin** - Full access to manage system
+5. Click **"Save"** to create account
+6. Share email and password with the user for login
+
+**Important:** Users cannot create their own accounts. Only administrators can register users through this interface.
 
 #### Step 6: Issue Books
 1. Click **"Issue"** in menu
-2. Select a user from the dropdown
+2. Select a user from the dropdown (user must be created first)
 3. Select an available book
 4. Click **"Issue Book"**
 5. Book stock automatically decreases
