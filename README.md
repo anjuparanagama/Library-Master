@@ -92,8 +92,6 @@ php artisan serve
 ### 🎨 User Interface
 - ✅ Fully responsive design (mobile, tablet, desktop)
 - ✅ Beautiful Tailwind CSS styling
-- ✅ Dark/Light mode compatible
-- ✅ Smooth Alpine.js interactions
 - ✅ Custom background and logo branding
 
 ---
@@ -108,13 +106,11 @@ php artisan serve
 ### Frontend
 - **Blade Templating** - Laravel's templating engine
 - **Tailwind CSS** - Utility-first CSS framework
-- **Alpine.js** - Lightweight JavaScript framework
 - **HTML5** - Semantic markup
 
 ### Tools & Libraries
 - **Composer** - PHP dependency manager
 - **Artisan CLI** - Laravel command-line tool
-- **NPM/Vite** - Frontend asset building (optional)
 
 ---
 
@@ -154,15 +150,6 @@ DB_CONNECTION=sqlite
 DB_DATABASE=database.sqlite
 ```
 
-Or for MySQL:
-```env
-DB_CONNECTION=mysql
-DB_HOST=127.0.0.1
-DB_PORT=3306
-DB_DATABASE=library_master
-DB_USERNAME=root
-DB_PASSWORD=
-```
 
 ### 5. Run Migrations
 ```bash
@@ -302,84 +289,6 @@ Book Management System/
 - return_date (DateTime, Nullable)
 - timestamps
 ```
-
----
-
-## 🌍 Where Can You Use This Application?
-
-### Educational Institutions
-- 🏫 School and university libraries
-- 📚 Student book lending management
-- 🎓 Curriculum resource management
-- 📖 Reference material tracking
-
-### Public Libraries
-- 🏢 Community library operations
-- 📑 Public book circulation
-- 👥 Member management and registration
-- 📊 Lending statistics
-
-### Corporate Libraries
-- 💼 Company resource libraries
-- 📋 Training material management
-- 👨‍💼 Employee access tracking
-- 🎯 Learning resource organization
-
-### Personal Collections
-- 🏠 Private book collection management
-- 👫 Lending to friends and family
-- 📊 Inventory tracking
-- 📝 Collection catalog
-
-### Archives & Museums
-- 🏛️ Historical document management
-- 🖼️ Artifact lending records
-- 🎨 Exhibit resource organization
-- 🔍 Archival tracking
-
----
-
-## 🔐 Authentication & User Roles
-
-### Admin Account (Full Access)
-**Email:** `admin@library.com`  
-**Password:** `admin123`
-
-**Admin Dashboard Features:**
-- 📊 View complete system statistics
-- 📈 See active issues and total resources
-- 👥 Manage all users in system
-- 📚 Add/Edit/Delete all books
-- 📂 Manage book categories
-- 📤 Issue books to users
-- 📥 Process book returns
-- 📋 View all transaction logs
-- ⏰ Track user last login times
-
-**Admin Capabilities:**
-- ✅ Full CRUD operations on all resources
-- ✅ System-wide visibility
-- ✅ Complete control over library operations
-- ✅ Generate reports and logs
-
-### Regular User Account (Limited Access)
-**Email:** `user@library.com`  
-**Password:** `user123`
-
-**User Dashboard Features:**
-- 📖 View currently issued books
-- 📅 See issue dates for each book
-- 📋 View complete borrowing history
-- ⏱️ Track how long books were borrowed
-
-**User Limitations:**
-- ❌ Cannot issue books
-- ❌ Cannot return books
-- ❌ Cannot view other users' information
-- ❌ Cannot manage system resources
-- ❌ Read-only access to own data
-
----
 
 ## 📱 Step-by-Step Usage Guide
 
@@ -660,7 +569,3 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 - Transaction logging and reporting
 
 ---
-
-**Last Updated:** November 26, 2025
-
-**Status:** ✅ Production Ready
